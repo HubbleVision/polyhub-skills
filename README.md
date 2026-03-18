@@ -6,8 +6,8 @@ OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — copy-
 
 | Skill | Description |
 |-------|-------------|
-| `polyhub_copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, TPSL rules |
-| `polyhub_account` | Account overview: portfolio stats, fee history, manual order placement |
+| `polyhub_copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
+| `polyhub_account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
 
 ## Quick Start
 
