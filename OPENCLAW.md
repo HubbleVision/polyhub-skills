@@ -4,17 +4,29 @@
 
 - `openclaw/skills/`
 
-当前版本：`v0.1.0`
+当前版本：`v0.2.0`
 
 ## 前置条件
 
 - 已安装并运行 OpenClaw（本机或服务器均可）
-- 你有可用的 Polyhub API Key（前缀为 `phub_`）
+- 已配置 `POLYHUB_API_BASE_URL`
+- 如果要使用 `polyhub_copy` / `polyhub_account`，还需要可用的 Polyhub API Key（前缀为 `phub_`）
 
-## 必需环境变量
+## 环境变量
+
+### 所有 skills 通用
 
 - `POLYHUB_API_BASE_URL`
   - Polyhub API 服务器地址（例如 `https://api.polyhub.example.com`）
+
+示例：
+
+```bash
+export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+```
+
+### 仅 `polyhub_copy` / `polyhub_account` 需要
+
 - `POLYHUB_API_KEY`
   - 你的 API key，必须以 `phub_` 开头
 
@@ -34,6 +46,7 @@ export POLYHUB_API_KEY="phub_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 | Skill | 说明 |
 |-------|------|
+| `polyhub_discover` | Discover 页面公开查询：标签列表、交易员排行、跨标签查询、地址详情、condition id 标签映射 |
 | `polyhub_copy` | 跟单任务管理：创建/更新/删除跟单任务、查看持仓/交易、卖出、批量操作、信号监控、TPSL 规则 |
 | `polyhub_account` | 账户概览：投资组合统计、费用记录、手动下单 |
 
@@ -52,6 +65,7 @@ mkdir -p ~/.openclaw/workspace/skills
 ### 方案 A：symlink（推荐，方便升级）
 
 ```bash
+ln -sfn "$(pwd)/openclaw/skills/polyhub_discover" ~/.openclaw/workspace/skills/polyhub_discover
 ln -sfn "$(pwd)/openclaw/skills/polyhub_copy"    ~/.openclaw/workspace/skills/polyhub_copy
 ln -sfn "$(pwd)/openclaw/skills/polyhub_account"  ~/.openclaw/workspace/skills/polyhub_account
 ```
@@ -79,6 +93,15 @@ ps -ef | grep -i openclaw | grep -v grep
 
 只要环境变量已生效、Skills 已被加载，你可以让 OpenClaw 使用 Skill 访问接口。
 
+### 验证公开 discover skill
+
+```bash
+BASE="${POLYHUB_API_BASE_URL%/}"
+curl -sS --fail-with-body "$BASE/api/v1/markets/tags"
+```
+
+### 验证需要 API key 的 skills
+
 也可以直接用 `curl` 验证 API Key 是否正确（不依赖 OpenClaw）：
 
 ```bash
@@ -93,4 +116,5 @@ curl -sS --fail-with-body \
 
 - `401 Unauthorized`：`POLYHUB_API_KEY` 缺失/无效/过期/被禁用
 - `404 Not Found`：URL 路径或 `taskId` 等参数不正确
+- 公开 discover skill 访问失败：优先检查 `POLYHUB_API_BASE_URL` 是否正确，以及目标服务是否暴露 `/api/v1/markets/tags`、`/api/v1/traders-v2/` 等公开接口
 - Skills 不生效：优先确认"运行用户"是否一致，以及 OpenClaw 进程是否需要重启才会重新加载 Skills
