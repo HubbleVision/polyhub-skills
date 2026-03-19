@@ -1,15 +1,28 @@
 # polyhub-skills
 
-OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — copy-trading management and account operations via API Key.
+OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — public discover queries plus authenticated copy-trading and account operations.
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
+| `polyhub_discover` | Public discover page queries: tags, trader rankings, cross-tag filters, trader-by-address lookup, market tag lookup |
 | `polyhub_copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
 | `polyhub_account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
 
 ## Quick Start
+
+### Public discover skill
+
+`polyhub_discover` only needs:
+
+```bash
+export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+```
+
+### Authenticated skills
+
+`polyhub_copy` and `polyhub_account` also require an API key:
 
 1. Get a Polyhub API key (prefix `phub_`)
    - Recommended: open PolyHub Web, click the avatar menu, then open `Skills API Key`
@@ -40,6 +53,7 @@ PolyHub Web now provides a dedicated `Skills API Key` entry for OpenClaw skills:
 ```
 openclaw/
   skills/
+    polyhub_discover/SKILL.md  # Public discover queries
     polyhub_copy/SKILL.md      # Copy-trading management
     polyhub_account/SKILL.md   # Account & trading
 OPENCLAW.md                    # Installation & usage guide
