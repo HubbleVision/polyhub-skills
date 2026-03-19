@@ -12,12 +12,28 @@ OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — copy-
 ## Quick Start
 
 1. Get a Polyhub API key (prefix `phub_`)
+   - Recommended: open PolyHub Web, click the avatar menu, then open `Skills API Key`
+   - Click `申请 API Key` and copy the plaintext key immediately. It is shown only once
 2. Set environment variables:
    ```bash
    export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
    export POLYHUB_API_KEY="phub_..."
    ```
 3. Install skills — see [OPENCLAW.md](OPENCLAW.md) for detailed instructions
+
+## Web Flow
+
+PolyHub Web now provides a dedicated `Skills API Key` entry for OpenClaw skills:
+
+1. Open the avatar dropdown in `poly_copy`
+2. Click `Skills API Key`
+3. Click `申请 API Key`
+4. Copy the generated `phub_` key and set:
+   ```bash
+   export POLYHUB_API_BASE_URL="https://your-polyhub-host/api/v1"
+   export POLYHUB_API_KEY="phub_..."
+   ```
+5. Continue with the installation steps in [OPENCLAW.md](OPENCLAW.md)
 
 ## Directory Structure
 
