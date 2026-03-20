@@ -183,6 +183,110 @@ Use this when the user wants to map market condition IDs back to discover tags.
 
 ---
 
+## Strategy: Find Profitable Traders
+
+When the user asks to find traders worth copying (e.g. "帮我找值得跟单的地址", "find me smart money", "谁在赚钱"), follow this multi-step process:
+
+### Step 1: Query top traders
+
+Choose the scope based on user intent:
+- If user specifies a tag (e.g. "Sports"), use that tag
+- If user wants broad search, use `tag=CROSS-TAG`
+- Always use `time_range=30d` unless user asks for all-time
+
+Default filters (user can override any):
+- `filterBots=1` (exclude bots)
+- `pnl_min=5000` (minimum $5K profit in 30 days)
+- `timing_score_min=52` (at least slightly positive alpha)
+- `trade_count_30_min=30` (enough trades for statistical significance)
+- `sort_by=ev_per_bought`, `sort_direction=desc` (rank by expected return per dollar)
+- `limit=15`
+
+```bash
+curl -sS --fail-with-body \
+  "$BASE/api/v1/traders-v2/?tag=Sports&time_range=30d&filterBots=1&pnl_min=5000&timing_score_min=52&trade_count_30_min=30&sort_by=ev_per_bought&sort_direction=desc&limit=15"
+```
+
+### Step 2: Identify hot sub-tags
+
+From Step 1 results, note which tags appear frequently in top results. Common valuable sub-tags under Sports: Soccer, Premier League, UCL, NBA, NHL, Liga MX, Argentina Primera División.
+
+Then query those specific sub-tags with the same filters to find specialists:
+
+```bash
+curl -sS --fail-with-body \
+  "$BASE/api/v1/traders-v2/?tag=Soccer&time_range=30d&filterBots=1&pnl_min=5000&timing_score_min=52&trade_count_30_min=10&sort_by=ev_per_bought&sort_direction=desc&limit=10"
+```
+
+### Step 3: Cross-validate with by-address
+
+For top 3-5 candidates, call by-address to see their performance across ALL tags:
+
+```bash
+curl -sS --fail-with-body \
+  "$BASE/api/v1/traders/by-address?user_id=0x..."
+```
+
+Evaluation criteria (prioritized):
+1. **Multi-tag consistency**: Strong in 3+ sub-tags beats one-hit wonder
+2. **Alpha Score > 55**: Indicates buy-low-sell-high timing ability (higher = better)
+3. **EV/Bought > 0.25**: Good expected return per dollar invested
+4. **30D trades >= 30**: Statistically reliable sample size
+5. **Positive 30D PnL across tags**: Not just one lucky market
+
+Disqualify if:
+- ALL-HUBBLE EV < 0.1 (too many low-quality trades overall)
+- Only one sub-tag has positive PnL (single-market luck)
+- Alpha = 50 exactly in main tag (no timing edge)
+
+### Step 4: Present results and handoff
+
+Present ranked results in this format:
+
+```
+🏆 推荐跟单地址
+
+1. 0x{address}
+   📊 Sports 30D: PnL ${pnl}, EV/Bought {ev}, Alpha {alpha}
+   📈 强势子标签: {subtag1} (EV {ev1}), {subtag2} (EV {ev2})
+   🔗 详情: https://polyhub.hubble.xyz/trader/{address}
+
+想跟单哪个？
+A) 我直接帮你创建跟单任务（通过 polyhub_copy skill，需要 API key）
+B) 打开网页操作: https://polyhub.hubble.xyz/discover?copy={address}&tag={tag}
+```
+
+### Parameter override examples
+
+- "PnL 至少 1 万" → `pnl_min=10000`
+- "要更活跃的" → `trade_count_30_min=100`
+- "Alpha 要高" → `timing_score_min=60`
+- "我要看机器人" → `filterBots=0`
+- "看全量数据" → `time_range=all`
+
+### Empty results fallback
+
+If a query returns zero results, progressively loosen filters:
+1. Reduce `pnl_min` to 1000
+2. Reduce `trade_count_30_min` to 10
+3. Remove `timing_score_min`
+4. Broaden to `tag=CROSS-TAG` if using a niche sub-tag
+
+---
+
+## Handoff to Copy
+
+After the user selects an address to copy:
+
+1. **Preferred: Skill 直接创建** — If `POLYHUB_API_KEY` is configured, use `polyhub_copy` skill's "Quick Copy from Discover" flow:
+   - Check balance via `GET /api/v1/portfolio/stats`
+   - If balance sufficient → `POST /api/v1/copy-tasks` with `targetTrader` and optional `filteredByTag`
+   - If balance insufficient → show deposit guidance
+2. **Fallback: 网页端跟单** — Provide the deep link: `https://polyhub.hubble.xyz/discover?copy={address}&tag={tag}`
+3. Always show the trader detail page link: `https://polyhub.hubble.xyz/trader/{address}`
+
+---
+
 ## Error handling
 
 - `400`: Invalid query parameters such as missing `tag`, invalid `time_range`, or empty `ids`
