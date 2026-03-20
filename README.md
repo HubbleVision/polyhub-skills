@@ -1,14 +1,14 @@
 # polyhub-skills
 
-OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — public discover queries plus authenticated copy-trading and account operations.
+Multi-platform Polyhub assistant assets for [Polyhub](https://github.com/HubbleVision/polyhub) — public discover queries plus authenticated copy-trading and account operations.
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| `polyhub_discover` | Public discover page queries: tags, trader rankings, cross-tag filters, trader-by-address lookup, market tag lookup |
-| `polyhub_copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
-| `polyhub_account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
+| Capability | OpenClaw | Codex | Claude | Description |
+|------------|----------|-------|--------|-------------|
+| Discover | `polyhub_discover` | `polyhub-discover` | `/polyhub-discover` | Public discover page queries: tags, trader rankings, cross-tag filters, trader-by-address lookup, market tag lookup |
+| Copy Trading | `polyhub_copy` | `polyhub-copy` | `/polyhub-copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
+| Account | `polyhub_account` | `polyhub-account` | `/polyhub-account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
 
 ## Quick Start
 
@@ -32,11 +32,14 @@ export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
    export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
    export POLYHUB_API_KEY="phub_..."
    ```
-3. Install skills — see [OPENCLAW.md](OPENCLAW.md) for detailed instructions
+3. Install skills
+   - OpenClaw: see [OPENCLAW.md](OPENCLAW.md)
+   - Codex: see [CODEX.md](CODEX.md)
+   - Claude Code: copy the packaged commands from `claude/.claude/commands/` or read [CLAUDE.md](CLAUDE.md)
 
 ## Web Flow
 
-PolyHub Web now provides a dedicated `Skills API Key` entry for OpenClaw skills:
+PolyHub Web now provides a dedicated `Skills API Key` entry that can be reused by OpenClaw, Codex, and Claude Code assets:
 
 1. Open the avatar dropdown in `poly_copy`
 2. Click `Skills API Key`
@@ -46,7 +49,7 @@ PolyHub Web now provides a dedicated `Skills API Key` entry for OpenClaw skills:
    export POLYHUB_API_BASE_URL="https://your-polyhub-host/api/v1"
    export POLYHUB_API_KEY="phub_..."
    ```
-5. Continue with the installation steps in [OPENCLAW.md](OPENCLAW.md)
+5. Continue with the platform-specific installation steps in [OPENCLAW.md](OPENCLAW.md), [CODEX.md](CODEX.md), or [CLAUDE.md](CLAUDE.md)
 
 ## Directory Structure
 
@@ -56,5 +59,18 @@ openclaw/
     polyhub_discover/SKILL.md  # Public discover queries
     polyhub_copy/SKILL.md      # Copy-trading management
     polyhub_account/SKILL.md   # Account & trading
-OPENCLAW.md                    # Installation & usage guide
+codex/
+  skills/
+    polyhub-discover/SKILL.md  # Codex discover skill
+    polyhub-copy/SKILL.md      # Codex copy-trading skill
+    polyhub-account/SKILL.md   # Codex account skill
+claude/
+  .claude/
+    commands/
+      polyhub-discover.md      # Claude discover command
+      polyhub-copy.md          # Claude copy-trading command
+      polyhub-account.md       # Claude account command
+OPENCLAW.md                    # OpenClaw installation & usage guide
+CODEX.md                       # Codex installation & usage guide
+CLAUDE.md                      # Claude Code usage guide
 ```
