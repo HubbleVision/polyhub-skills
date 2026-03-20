@@ -8,7 +8,7 @@ OpenClaw Skills for [Polyhub](https://github.com/HubbleVision/polyhub) — publi
 |-------|-------------|
 | `polyhub_discover` | Public discover page queries: tags, trader rankings, cross-tag filters, trader-by-address lookup, market tag lookup |
 | `polyhub_copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
-| `polyhub_account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
+| `polyhub_account` | Account overview: portfolio stats and authenticated account data lookup |
 
 ## Quick Start
 
@@ -55,6 +55,6 @@ openclaw/
   skills/
     polyhub_discover/SKILL.md  # Public discover queries
     polyhub_copy/SKILL.md      # Copy-trading management
-    polyhub_account/SKILL.md   # Account & trading
+    polyhub_account/SKILL.md   # Account overview
 OPENCLAW.md                    # Installation & usage guide
 ```
