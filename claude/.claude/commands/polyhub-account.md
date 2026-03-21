@@ -1,5 +1,7 @@
 # /polyhub-account
 
+Version: v0.3.2
+
 Use this command for Polyhub account queries and manual order placement.
 
 Interpret `$ARGUMENTS` as the user's account or order intent. Use the terminal and `curl` to call the Polyhub authenticated API.
