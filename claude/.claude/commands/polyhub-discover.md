@@ -1,6 +1,6 @@
 # /polyhub-discover
 
-Version: v0.1.1
+Version: v0.3.3
 
 Use this command for Polyhub public discover queries.
 
