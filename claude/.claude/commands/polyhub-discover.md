@@ -1,5 +1,7 @@
 # /polyhub-discover
 
+Version: v0.1.1
+
 Use this command for Polyhub public discover queries.
 
 Interpret `$ARGUMENTS` as the user's discover request. Use the terminal and `curl` to call the Polyhub public API.

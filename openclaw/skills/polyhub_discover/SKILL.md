@@ -5,7 +5,7 @@ description: Explore public discover data on Polyhub without API key auth, inclu
 
 # Polyhub Discover Skill
 
-Version: v0.1.0
+Version: v0.1.1
 
 ## When to use
 
@@ -187,4 +187,3 @@ Use this when the user wants to map market condition IDs back to discover tags.
 
 - `400`: Invalid query parameters such as missing `tag`, invalid `time_range`, or empty `ids`
 - `500`: Backend query failed or service unavailable
-

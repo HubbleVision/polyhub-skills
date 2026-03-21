@@ -1,6 +1,6 @@
 # /polyhub-account
 
-Version: v0.3.2
+Version: v0.3.3
 
 Use this command for Polyhub account queries and manual order placement.
 

@@ -5,6 +5,8 @@ description: Manage Polyhub copy-trading tasks, positions, trades, signals, sell
 
 # Polyhub Copy
 
+Version: v0.3.1
+
 Use this skill when the user wants to manage copy-trading tasks on Polyhub.
 
 ## Requirements

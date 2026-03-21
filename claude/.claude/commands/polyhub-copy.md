@@ -1,5 +1,7 @@
 # /polyhub-copy
 
+Version: v0.3.1
+
 Use this command for Polyhub copy-trading task management.
 
 Interpret `$ARGUMENTS` as the user's copy-trading intent. Use the terminal and `curl` to call the Polyhub authenticated API.

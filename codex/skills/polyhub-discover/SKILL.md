@@ -5,6 +5,8 @@ description: Query Polyhub public discover APIs for tags, trader rankings, trade
 
 # Polyhub Discover
 
+Version: v0.1.1
+
 Use this skill when the user wants public discover data from Polyhub.
 
 ## Requirements

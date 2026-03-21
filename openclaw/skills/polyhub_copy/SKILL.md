@@ -5,7 +5,7 @@ description: Manage copy-trading tasks, view signals, positions and trades on Po
 
 # Polyhub Copy Skill
 
-Version: v0.3.0
+Version: v0.3.1
 
 ## When to use
 

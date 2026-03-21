@@ -5,7 +5,7 @@ description: View Polyhub portfolio stats, fee history, and place manual orders 
 
 # Polyhub Account
 
-Version: v0.3.2
+Version: v0.3.3
 
 Use this skill when the user wants account-level data or manual trading actions on Polyhub.
 
