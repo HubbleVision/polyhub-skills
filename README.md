@@ -10,6 +10,8 @@ Multi-platform Polyhub assistant assets for [Polyhub](https://github.com/HubbleV
 | Copy Trading | `polyhub_copy` | `polyhub-copy` | `/polyhub-copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
 | Account | `polyhub_account` | `polyhub-account` | `/polyhub-account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
 
+`portfolio/stats` semantics are aligned with current Polyhub UI usage: official `positionsValue`, official `totalPnL`, and `availableBalance` already net of `unsettledFees`.
+
 ## Quick Start
 
 ### Public discover skill

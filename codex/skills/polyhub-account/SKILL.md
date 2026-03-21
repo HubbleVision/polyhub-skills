@@ -38,6 +38,20 @@ AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/
 
 ### Portfolio stats
 
+Field semantics:
+
+- `positionsValue`: official Polymarket positions value
+- `availableBalance`: official USDC balance minus `unsettledFees`
+- `totalPnL`: official Polymarket total PnL
+- `unsettledFees`: unsettled Polyhub fees in USDC
+- `investedCapital`: Polyhub-calculated invested capital for copy-task history
+
+UI alignment:
+
+- `poly_copy` portfolio header uses this endpoint
+- avatar dropdown `USDC Balance` uses `availableBalance`
+- avatar dropdown `Account Value` uses `availableBalance + positionsValue`
+
 ```bash
 curl -sS --fail-with-body "${AUTH[@]}" \
   "$BASE/api/v1/portfolio/stats"

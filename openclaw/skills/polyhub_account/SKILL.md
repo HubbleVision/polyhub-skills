@@ -5,7 +5,7 @@ description: View portfolio stats on Polyhub using an API key.
 
 # Polyhub Account Skill
 
-Version: v0.3.0
+Version: v0.3.1
 
 ## When to use
 
@@ -51,6 +51,20 @@ AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/
 - `GET /api/v1/portfolio/stats`
 
 Returns aggregated portfolio statistics for the authenticated user.
+
+Current field semantics:
+
+- `positionsValue`: official Polymarket positions value
+- `availableBalance`: official USDC balance minus `unsettledFees`
+- `totalPnL`: official Polymarket total PnL
+- `unsettledFees`: unsettled Polyhub fees in USDC
+- `investedCapital`: Polyhub-calculated invested capital for copy-task history
+
+Current UI alignment in `poly_copy`:
+
+- Portfolio page top stats use this endpoint
+- Avatar dropdown `USDC Balance` uses `availableBalance`
+- Avatar dropdown `Account Value` uses `availableBalance + positionsValue`
 
 ```bash
 curl -sS --fail-with-body "${AUTH[@]}" "$BASE/api/v1/portfolio/stats"
