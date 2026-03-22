@@ -5,7 +5,7 @@ description: Explore public discover data on Polyhub without API key auth, inclu
 
 # Polyhub Discover Skill
 
-Version: v0.3.3
+Version: v0.3.4
 
 ## When to use
 
