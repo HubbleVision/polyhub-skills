@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This repository contains multi-platform Polyhub assistant assets.
 
@@ -6,11 +6,11 @@ This repository contains multi-platform Polyhub assistant assets.
 
 - `openclaw/skills/`: OpenClaw-native skills
 - `codex/skills/`: Codex-native skills
-- `claude/.claude/commands/`: Claude Code slash commands
+- `Codex/.Codex/commands/`: Codex slash commands
 
 Use these assets when the user wants to query Polyhub discover data, manage copy-trading tasks, or inspect account data.
 
-## Available Claude Commands
+## Available Codex Commands
 
 - `/polyhub-discover`
 - `/polyhub-copy`
@@ -41,18 +41,18 @@ export POLYHUB_API_KEY="phub_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 ## Command Layout
 
-The packaged Claude commands live under `claude/.claude/commands/`.
+The packaged Codex commands live under `Codex/.Codex/commands/`.
 
 To install them into another repository:
 
 ```bash
-mkdir -p .claude/commands
-cp -R /path/to/polyhub-skills/claude/.claude/commands/* .claude/commands/
+mkdir -p .Codex/commands
+cp -R /path/to/polyhub-skills/Codex/.Codex/commands/* .Codex/commands/
 ```
 
 Or install globally:
 
 ```bash
-mkdir -p ~/.claude/commands
-cp -R /path/to/polyhub-skills/claude/.claude/commands/* ~/.claude/commands/
+mkdir -p ~/.Codex/commands
+cp -R /path/to/polyhub-skills/Codex/.Codex/commands/* ~/.Codex/commands/
 ```

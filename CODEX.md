@@ -17,18 +17,24 @@
 ## 前置条件
 
 - 已安装 Codex
-- 已配置 `POLYHUB_API_BASE_URL`
 - 如果要使用 `polyhub-copy` / `polyhub-account`，还需要可用的 Polyhub API Key（前缀为 `phub_`）
 
 ## 环境变量
 
-### 所有 skills 通用
+### `polyhub-discover`
+
+```bash
+# 默认直接使用公开地址，无需配置环境变量
+# https://api.polyhub.example.com
+```
+
+如果是自定义部署，也可以覆盖：
 
 ```bash
 export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
 ```
 
-### 仅 `polyhub-copy` / `polyhub-account` 需要
+### `polyhub-copy` / `polyhub-account` 必需
 
 ```bash
 export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"

@@ -16,7 +16,15 @@ Multi-platform Polyhub assistant assets for [Polyhub](https://github.com/HubbleV
 
 ### Public discover skill
 
-`polyhub_discover` only needs:
+`polyhub_discover` can be used directly without any environment variables.
+
+Default API host:
+
+```bash
+https://api.polyhub.example.com
+```
+
+Optional override for custom deployments:
 
 ```bash
 export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
@@ -24,7 +32,7 @@ export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
 
 ### Authenticated skills
 
-`polyhub_copy` and `polyhub_account` also require an API key:
+`polyhub_copy` and `polyhub_account` require both base URL and API key:
 
 1. Get a Polyhub API key (prefix `phub_`)
    - Recommended: open PolyHub Web, click the avatar menu, then open `Skills API Key`

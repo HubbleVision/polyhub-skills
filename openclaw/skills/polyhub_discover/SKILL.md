@@ -20,8 +20,9 @@ Use this skill when the user asks about:
 
 ## Requirements
 
-- `POLYHUB_API_BASE_URL` — Polyhub API server base URL
 - `curl` must be available in the runtime environment
+
+`POLYHUB_API_BASE_URL` is optional. If it is not set, default to `https://api.polyhub.example.com`.
 
 This skill does not require `POLYHUB_API_KEY`.
 
@@ -49,7 +50,8 @@ For common intents, map user requests like this:
 ### Curl base setup
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL%/}"
+BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${BASE%/}"
 ```
 
 ---

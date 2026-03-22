@@ -9,23 +9,28 @@
 ## 前置条件
 
 - 已安装并运行 OpenClaw（本机或服务器均可）
-- 已配置 `POLYHUB_API_BASE_URL`
 - 如果要使用 `polyhub_copy` / `polyhub_account`，还需要可用的 Polyhub API Key（前缀为 `phub_`）
 
 ## 环境变量
 
-### 所有 skills 通用
+### `polyhub_discover`
 
-- `POLYHUB_API_BASE_URL`
-  - Polyhub API 服务器地址（例如 `https://api.polyhub.example.com`）
+默认直接使用公开地址：
 
-示例：
+```bash
+https://api.polyhub.example.com
+```
+
+如果是自定义部署，可选设置：
 
 ```bash
 export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
 ```
 
-### 仅 `polyhub_copy` / `polyhub_account` 需要
+### `polyhub_copy` / `polyhub_account` 必需
+
+- `POLYHUB_API_BASE_URL`
+  - Polyhub API 服务器地址（例如 `https://api.polyhub.example.com`）
 
 - `POLYHUB_API_KEY`
   - 你的 API key，必须以 `phub_` 开头
@@ -96,7 +101,8 @@ ps -ef | grep -i openclaw | grep -v grep
 ### 验证公开 discover skill
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL%/}"
+BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${BASE%/}"
 curl -sS --fail-with-body "$BASE/api/v1/markets/tags"
 ```
 
@@ -116,5 +122,5 @@ curl -sS --fail-with-body \
 
 - `401 Unauthorized`：`POLYHUB_API_KEY` 缺失/无效/过期/被禁用
 - `404 Not Found`：URL 路径或 `taskId` 等参数不正确
-- 公开 discover skill 访问失败：优先检查 `POLYHUB_API_BASE_URL` 是否正确，以及目标服务是否暴露 `/api/v1/markets/tags`、`/api/v1/traders-v2/` 等公开接口
+- 公开 discover skill 访问失败：如果使用默认公共地址，优先检查目标服务可达性；如果使用自定义部署，再检查 `POLYHUB_API_BASE_URL` 是否正确，以及目标服务是否暴露 `/api/v1/markets/tags`、`/api/v1/traders-v2/` 等公开接口
 - Skills 不生效：优先确认"运行用户"是否一致，以及 OpenClaw 进程是否需要重启才会重新加载 Skills

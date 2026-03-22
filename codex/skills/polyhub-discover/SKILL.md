@@ -11,9 +11,10 @@ Use this skill when the user wants public discover data from Polyhub.
 
 ## Requirements
 
-- `POLYHUB_API_BASE_URL` is set.
 - `curl` is available.
 - `POLYHUB_API_KEY` is not required.
+
+`POLYHUB_API_BASE_URL` is optional. If it is not set, use the default public Polyhub API host directly.
 
 ## Workflow
 
@@ -24,7 +25,8 @@ Use this skill when the user wants public discover data from Polyhub.
 ## Base Setup
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL%/}"
+BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${BASE%/}"
 ```
 
 ## Intent Mapping
