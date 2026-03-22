@@ -5,7 +5,7 @@ description: View portfolio stats on Polyhub using an API key.
 
 # Polyhub Account Skill
 
-Version: v0.3.4
+Version: v0.3.5
 
 ## When to use
 

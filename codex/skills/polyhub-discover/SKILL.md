@@ -5,7 +5,7 @@ description: Query Polyhub public discover APIs for tags, trader rankings, trade
 
 # Polyhub Discover
 
-Version: v0.3.4
+Version: v0.3.5
 
 Use this skill when the user wants public discover data from Polyhub.
 
@@ -14,7 +14,7 @@ Use this skill when the user wants public discover data from Polyhub.
 - `curl` is available.
 - `POLYHUB_API_KEY` is not required.
 
-`POLYHUB_API_BASE_URL` is optional. If it is not set, use the default public Polyhub API host directly.
+`POLYHUB_API_BASE_URL` is optional. If it is not set, use the default Polyhub API host directly: `https://polyhub.skill-test.bedev.hubble-rpc.xyz`.
 
 ## Workflow
 
@@ -25,7 +25,7 @@ Use this skill when the user wants public discover data from Polyhub.
 ## Base Setup
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${POLYHUB_API_BASE_URL:-https://polyhub.skill-test.bedev.hubble-rpc.xyz}"
 BASE="${BASE%/}"
 ```
 

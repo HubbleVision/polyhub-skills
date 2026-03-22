@@ -21,7 +21,7 @@ Multi-platform Polyhub assistant assets for [Polyhub](https://github.com/HubbleV
 Default API host:
 
 ```bash
-https://api.polyhub.example.com
+https://polyhub.skill-test.bedev.hubble-rpc.xyz
 ```
 
 Optional override for custom deployments:

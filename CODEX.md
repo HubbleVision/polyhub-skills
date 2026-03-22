@@ -4,7 +4,7 @@
 
 - `codex/skills/`
 
-当前版本：`v0.3.4`
+当前版本：`v0.3.5`
 
 ## 包含的 Skills
 
@@ -25,7 +25,7 @@
 
 ```bash
 # 默认直接使用公开地址，无需配置环境变量
-# https://api.polyhub.example.com
+# https://polyhub.skill-test.bedev.hubble-rpc.xyz
 ```
 
 如果是自定义部署，也可以覆盖：

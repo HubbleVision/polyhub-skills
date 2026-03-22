@@ -4,7 +4,7 @@
 
 - `openclaw/skills/`
 
-当前版本：`v0.3.4`
+当前版本：`v0.3.5`
 
 ## 前置条件
 
@@ -18,7 +18,7 @@
 默认直接使用公开地址：
 
 ```bash
-https://api.polyhub.example.com
+https://polyhub.skill-test.bedev.hubble-rpc.xyz
 ```
 
 如果是自定义部署，可选设置：
@@ -101,7 +101,7 @@ ps -ef | grep -i openclaw | grep -v grep
 ### 验证公开 discover skill
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${POLYHUB_API_BASE_URL:-https://polyhub.skill-test.bedev.hubble-rpc.xyz}"
 BASE="${BASE%/}"
 curl -sS --fail-with-body "$BASE/api/v1/markets/tags"
 ```

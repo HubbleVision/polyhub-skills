@@ -5,7 +5,7 @@ description: Explore public discover data on Polyhub without API key auth, inclu
 
 # Polyhub Discover Skill
 
-Version: v0.3.4
+Version: v0.3.5
 
 ## When to use
 
@@ -22,7 +22,7 @@ Use this skill when the user asks about:
 
 - `curl` must be available in the runtime environment
 
-`POLYHUB_API_BASE_URL` is optional. If it is not set, default to `https://api.polyhub.example.com`.
+`POLYHUB_API_BASE_URL` is optional. If it is not set, default to `https://polyhub.skill-test.bedev.hubble-rpc.xyz`.
 
 This skill does not require `POLYHUB_API_KEY`.
 
@@ -50,7 +50,7 @@ For common intents, map user requests like this:
 ### Curl base setup
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL:-https://api.polyhub.example.com}"
+BASE="${POLYHUB_API_BASE_URL:-https://polyhub.skill-test.bedev.hubble-rpc.xyz}"
 BASE="${BASE%/}"
 ```
 
