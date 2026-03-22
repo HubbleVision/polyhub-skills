@@ -5,7 +5,7 @@ description: View portfolio stats on Polyhub using an API key.
 
 # Polyhub Account Skill
 
-Version: v0.3.5
+Version: v0.3.6
 
 ## When to use
 
@@ -19,6 +19,31 @@ Use this skill when the user asks about:
 - `POLYHUB_API_KEY` — API key (must start with `phub_`)
 - `curl` must be available in the runtime environment.
 - `jq` is strongly recommended for building JSON payloads safely.
+
+If `POLYHUB_API_KEY` is missing, first tell the user to apply for one and include the official site URL: `https://polyhub.hubble.xyz/`.
+Recommended guidance:
+
+1. Open Polyhub Web: `https://polyhub.hubble.xyz/`
+2. Click the avatar menu.
+3. Open `Skills API Key`.
+4. Click `申请 API Key`.
+5. Set both `POLYHUB_API_BASE_URL` and `POLYHUB_API_KEY`.
+
+Suggested wording:
+
+```text
+还没配置 API Key。要使用这个 Polyhub 鉴权功能，需要：
+1. POLYHUB_API_BASE_URL：你的 Polyhub API 地址
+2. POLYHUB_API_KEY：你的 API Key（以 phub_ 开头）
+
+申请地址：
+https://polyhub.hubble.xyz/
+
+获取方式：
+打开 Polyhub 官网 -> 点击头像 -> Skills API Key -> 申请 API Key
+
+配置好之后直接发给我，或者先在环境变量里设置好，我再继续帮你处理。
+```
 
 ## Safety rules
 
