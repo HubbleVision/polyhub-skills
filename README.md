@@ -1,86 +1,90 @@
-# polyhub-skills
+# PolyHub Skills 🦞
 
-Multi-platform Polyhub assistant assets for [Polyhub](https://github.com/HubbleVision/polyhub) — public discover queries plus authenticated copy-trading and account operations.
+Control your Polymarket copy-trading account from any AI you already use.
 
-## Skills
+We spent months tracking who actually wins on Polymarket -
+who's trading, which markets, what edge.
+These Skills put that data and execution layer directly inside your AI agent.
 
-| Capability | OpenClaw | Codex | Claude | Description |
-|------------|----------|-------|--------|-------------|
-| Discover | `polyhub_discover` | `polyhub-discover` | `/polyhub-discover` | Public discover page queries: tags, trader rankings, cross-tag filters, trader-by-address lookup, market tag lookup |
-| Copy Trading | `polyhub_copy` | `polyhub-copy` | `/polyhub-copy` | Copy-trading task management: CRUD, positions, trades, sell, batch ops, signals, stream, TPSL rules, safer JSON payload templates |
-| Account | `polyhub_account` | `polyhub-account` | `/polyhub-account` | Account overview: portfolio stats, fee history, manual order placement with explicit field validation and order-type guidance |
+## What you can do
 
-`portfolio/stats` semantics are aligned with current Polyhub UI usage: official `positionsValue`, official `totalPnL`, and `availableBalance` already net of `unsettledFees`.
+Ask your AI to find the top-performing traders on Polymarket.
+
+Ask it to copy one. Ask it how your portfolio is doing.
+
+It handles the rest.
+
+- 🔍 **polyhub_discover** - Browse trader leaderboards, filter by tag, look up any address
+- 📋 **polyhub_copy** - Create, pause, delete copy trades. Track positions, signals, trades in real time
+- 📊 **polyhub_account** - Portfolio stats, fee history, manual order placement
+
+Works with **OpenClaw · Claude Code · Codex** - and any platform that supports Skills.
+
+> **Telegram & WeChat users:** PolyHub Skills are available on Telegram and WeChat
+> via OpenClaw. Once you have OpenClaw set up, you can chat with your agent
+> and control your PolyHub account directly from either app - no extra configuration needed.
+
+---
 
 ## Quick Start
 
-### Public discover skill
+### Discover (no setup needed)
 
-`polyhub_discover` can be used directly without any environment variables.
-
-Default API host:
+`polyhub_discover` works out of the box - no API key required.
 
 ```bash
+# Default host
 https://polyhub.skill-test.bedev.hubble-rpc.xyz
-```
 
-Optional override for custom deployments:
-
-```bash
+# Optional: override for custom deployments
 export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
 ```
 
-### Authenticated skills
+### Copy Trading & Account (requires API key)
 
-`polyhub_copy` and `polyhub_account` require both base URL and API key:
+1. Open PolyHub Web -> avatar menu -> **Skills API Key**
+2. Click **Request API Key** and copy it immediately (shown once)
+3. Set environment variables:
 
-1. Get a Polyhub API key (prefix `phub_`)
-   - Recommended: open PolyHub Web, click the avatar menu, then open `Skills API Key`
-   - Click `申请 API Key` and copy the plaintext key immediately. It is shown only once
-2. Set environment variables:
-   ```bash
-   export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
-   export POLYHUB_API_KEY="phub_..."
-   ```
-3. Install skills
-   - OpenClaw: see [OPENCLAW.md](OPENCLAW.md)
-   - Codex: see [CODEX.md](CODEX.md)
-   - Claude Code: copy the packaged commands from `claude/.claude/commands/` or read [CLAUDE.md](CLAUDE.md)
+```bash
+export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_KEY="phub_..."
+```
 
-## Web Flow
+4. Install for your platform:
+   - OpenClaw -> see [**OPENCLAW.md**](OPENCLAW.md)
+   - Codex -> see [**CODEX.md**](CODEX.md)
+   - Claude Code -> see [**CLAUDE.md**](CLAUDE.md)
 
-PolyHub Web now provides a dedicated `Skills API Key` entry that can be reused by OpenClaw, Codex, and Claude Code assets:
+---
 
-1. Open the avatar dropdown in `poly_copy`
-2. Click `Skills API Key`
-3. Click `申请 API Key`
-4. Copy the generated `phub_` key and set:
-   ```bash
-   export POLYHUB_API_BASE_URL="https://your-polyhub-host/api/v1"
-   export POLYHUB_API_KEY="phub_..."
-   ```
-5. Continue with the platform-specific installation steps in [OPENCLAW.md](OPENCLAW.md), [CODEX.md](CODEX.md), or [CLAUDE.md](CLAUDE.md)
+## Platform Guides
+
+| Platform | Guide |
+| --- | --- |
+| OpenClaw | [OPENCLAW.md](OPENCLAW.md) |
+| Codex | [CODEX.md](CODEX.md) |
+| Claude Code | [CLAUDE.md](CLAUDE.md) |
+
+---
 
 ## Directory Structure
 
+```text
+openclaw/skills/
+  polyhub_discover/SKILL.md
+  polyhub_copy/SKILL.md
+  polyhub_account/SKILL.md
+codex/skills/
+  polyhub-discover/SKILL.md
+  polyhub-copy/SKILL.md
+  polyhub-account/SKILL.md
+claude/.claude/commands/
+  polyhub-discover.md
+  polyhub-copy.md
+  polyhub-account.md
 ```
-openclaw/
-  skills/
-    polyhub_discover/SKILL.md  # Public discover queries
-    polyhub_copy/SKILL.md      # Copy-trading management
-    polyhub_account/SKILL.md   # Account & trading
-codex/
-  skills/
-    polyhub-discover/SKILL.md  # Codex discover skill
-    polyhub-copy/SKILL.md      # Codex copy-trading skill
-    polyhub-account/SKILL.md   # Codex account skill
-claude/
-  .claude/
-    commands/
-      polyhub-discover.md      # Claude discover command
-      polyhub-copy.md          # Claude copy-trading command
-      polyhub-account.md       # Claude account command
-OPENCLAW.md                    # OpenClaw installation & usage guide
-CODEX.md                       # Codex installation & usage guide
-CLAUDE.md                      # Claude Code usage guide
-```
+
+---
+
+Built by [PolyHub](https://x.com/MeetPolyHub) × [Hubble](https://hubble.xyz/) 🦞
