@@ -138,14 +138,17 @@ Check `availableBalance` from the response:
 
 ### Deposit Guidance
 
+Depositing is **not supported via skill or API**. Always direct the user to the web UI.
+
 When balance is insufficient, present this message:
 
 ```
 当前可用余额: $XX
 
-建议至少 $100 才能有效跟单。请充值后再创建跟单任务。
-👉 请到 https://polyhub.hubble.xyz 页面右上角点击「充值」按钮
-充值完成后告诉我，我帮你继续创建跟单任务。
+建议至少 $100 才能有效跟单。充值只能通过网页端操作：
+👉 https://polyhub.hubble.xyz/copy-history?action=deposit
+（打开后会自动弹出充值窗口）
+充值完成后回来告诉我，我帮你继续创建跟单任务。
 ```
 
 ### Quick Copy from Discover

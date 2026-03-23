@@ -281,9 +281,11 @@ After the user selects an address to copy:
 1. **Preferred: Skill 直接创建** — If `POLYHUB_API_KEY` is configured, use `polyhub_copy` skill's "Quick Copy from Discover" flow:
    - Check balance via `GET /api/v1/portfolio/stats`
    - If balance sufficient → `POST /api/v1/copy-tasks` with `targetTrader` and optional `filteredByTag`
-   - If balance insufficient → show deposit guidance
+   - If balance insufficient → direct user to deposit on the web (skill cannot deposit): `https://polyhub.hubble.xyz/copy-history?action=deposit`
 2. **Fallback: 网页端跟单** — Provide the deep link: `https://polyhub.hubble.xyz/discover?copy={address}&tag={tag}`
 3. Always show the trader detail page link: `https://polyhub.hubble.xyz/trader/{address}`
+
+Note: Depositing funds is **only possible via the web UI**, not through any skill or API.
 
 ---
 
