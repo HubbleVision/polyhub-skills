@@ -1,6 +1,6 @@
 # /polyhub-copy
 
-Version: v0.3.3
+Version: v0.3.7
 
 Use this command for Polyhub copy-trading task management.
 
