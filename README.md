@@ -34,10 +34,7 @@ Works with **OpenClaw · Claude Code · Codex** - and any platform that supports
 
 ```bash
 # Default host
-https://polyhub.skill-test.bedev.hubble-rpc.xyz
-
-# Optional: override for custom deployments
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 ```
 
 ### Copy Trading & Account (requires API key)
@@ -47,7 +44,7 @@ export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
 3. Set environment variables:
 
 ```bash
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 export POLYHUB_API_KEY="phub_..."
 ```
 
