@@ -18,16 +18,16 @@ Use these assets when the user wants to query Polyhub discover data, manage copy
 
 ## Environment
 
-Optional for public discover commands:
+Fixed API base URL for all commands:
 
 ```bash
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 ```
 
-Required for authenticated commands:
+Authenticated commands also require:
 
 ```bash
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 export POLYHUB_API_KEY="phub_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 

@@ -5,18 +5,18 @@ description: Manage Polyhub copy-trading tasks, positions, trades, signals, sell
 
 # Polyhub Copy
 
-Version: v0.3.7
+Version: v0.3.8
 
 Use this skill when the user wants to manage copy-trading tasks on Polyhub.
 
 ## Requirements
 
-- `POLYHUB_API_BASE_URL` is set.
+- `POLYHUB_API_BASE_URL` is fixed to `https://polyhub.skill-test.bedev.hubble-rpc.xyz`.
 - `POLYHUB_API_KEY` is set and starts with `phub_`.
 - `curl` is available.
 - `jq` is recommended.
 
-If `POLYHUB_API_KEY` is missing, tell the user they need to apply for one first and include the official site URL: `https://polyhub.hubble.xyz/`.
+If `POLYHUB_API_KEY` is missing, guide the user to register and apply for one first at `https://polyhub.hubble.xyz/`.
 Recommended guidance:
 
 1. Open Polyhub Web: `https://polyhub.hubble.xyz/`
@@ -30,17 +30,14 @@ Recommended guidance:
 Suggested wording:
 
 ```text
-还没配置 API Key。要使用这个 Polyhub 鉴权功能，需要：
-1. POLYHUB_API_BASE_URL：你的 Polyhub API 地址
-2. POLYHUB_API_KEY：你的 API Key（以 phub_ 开头）
+API key is not configured yet, so I can't run copy-trading or account actions for now.
 
-申请地址：
+Please register first on PolyHub:
 https://polyhub.hubble.xyz/
 
-获取方式：
-打开 Polyhub 官网 -> 点击头像 -> Skills API Key -> 申请 API Key
+After registration, click your avatar in the top-right corner and open `Skills API Key` to apply.
 
-配置好之后直接发给我，或者先在环境变量里设置好，我再继续帮你处理。
+Send me the generated key and I'll continue right away.
 ```
 
 ## Safety Rules
@@ -54,7 +51,7 @@ https://polyhub.hubble.xyz/
 ## Base Setup
 
 ```bash
-BASE="${POLYHUB_API_BASE_URL%/}"
+BASE="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/json")
 ```
 

@@ -4,7 +4,7 @@
 
 - `codex/skills/`
 
-当前版本：`v0.3.6`
+当前版本：`v0.3.8`
 
 ## 包含的 Skills
 
@@ -28,16 +28,16 @@
 # https://polyhub.skill-test.bedev.hubble-rpc.xyz
 ```
 
-如果是自定义部署，也可以覆盖：
+固定 API 地址：
 
 ```bash
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 ```
 
-### `polyhub-copy` / `polyhub-account` 必需
+### `polyhub-copy` / `polyhub-account`
 
 ```bash
-export POLYHUB_API_BASE_URL="https://api.polyhub.example.com"
+export POLYHUB_API_BASE_URL="https://polyhub.skill-test.bedev.hubble-rpc.xyz"
 export POLYHUB_API_KEY="phub_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
