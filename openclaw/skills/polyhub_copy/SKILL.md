@@ -148,6 +148,66 @@ curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/copy-tasks" \
 
 If the user wants advanced config, build `taskConfig` and `tpslRules` explicitly instead of accepting arbitrary JSON.
 
+### Pre-flight: Balance Check
+
+Before creating a copy task, check if the user has sufficient balance:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" "$BASE/api/v1/portfolio/stats"
+```
+
+Check `availableBalance` from the response:
+- If `availableBalance >= 100`: proceed with task creation
+- If `availableBalance < 100`: show deposit guidance (see below)
+- If `availableBalance < 10`: strongly recommend depositing before creating any tasks
+
+### Deposit Guidance
+
+Depositing is **not supported via skill or API**. Always direct the user to the web UI.
+
+When balance is insufficient, present this message:
+
+```
+当前可用余额: $XX
+
+建议至少 $100 才能有效跟单。充值只能通过网页端操作：
+👉 https://polyhub.hubble.xyz/copy-history?action=deposit
+（打开后会自动弹出充值窗口）
+充值完成后回来告诉我，我帮你继续创建跟单任务。
+```
+
+### Quick Copy from Discover
+
+When the user comes from a discover flow (already has a target address and optionally a tag), use this streamlined creation:
+
+1. Run balance check (see Pre-flight above)
+2. Confirm with user: "要跟单 {address} 吗？标签: {tag or '全部市场'}"
+3. Create task:
+
+```bash
+PAYLOAD="$(jq -n \
+  --arg targetTrader "0x..." \
+  --arg filteredByTag "Sports" \
+  '{targetTrader: $targetTrader, filteredByTag: $filteredByTag}')"
+
+curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/copy-tasks" \
+  -d "$PAYLOAD"
+```
+
+If `filteredByTag` is not specified (user wants all markets), omit it:
+
+```bash
+PAYLOAD="$(jq -n \
+  --arg targetTrader "0x..." \
+  '{targetTrader: $targetTrader}')"
+```
+
+After successful creation, show:
+```
+✅ 跟单任务已创建
+📊 查看任务: https://polyhub.hubble.xyz/copy-history
+```
+
 ### Action: Get copy task
 
 - `GET /api/v1/copy-tasks/{taskId}`
