@@ -5,7 +5,7 @@ description: Manage copy-trading tasks, view signals, positions and trades on Po
 
 # Polyhub Copy Skill
 
-Version: v0.3.8
+Version: v0.3.9
 
 ## When to use
 
@@ -69,6 +69,7 @@ Use the `bash` tool to call the API with `curl`.
 For common intents, map user requests like this:
 
 - “列出任务” -> `GET /api/v1/copy-tasks`
+- “删除任务” -> 先 `GET /api/v1/copy-tasks/{taskId}/positions?status=active`，有 active positions 时先 `POST /api/v1/copy-tasks/{taskId}/sell-all`，再 `DELETE /api/v1/copy-tasks/{taskId}`
 - “暂停/恢复/停止任务” -> `PATCH /api/v1/copy-tasks/{taskId}` with `status`
 - “改跟单模式/改单笔或总仓位限制” -> `PATCH /api/v1/copy-tasks/{taskId}` with `taskConfig`
 - “看持仓/成交” -> `GET /positions` or `GET /trades`
@@ -477,15 +478,43 @@ Status guidance:
 
 - `DELETE /api/v1/copy-tasks/{taskId}`
 
-Before calling: validate `taskId` and confirm.
+Required flow before delete:
+
+1. Validate `taskId`.
+2. Check active positions with `GET /api/v1/copy-tasks/{taskId}/positions?status=active`.
+3. If any active positions exist, restate that deleting the task will first clear those positions, then delete the task.
+4. After explicit confirmation, call `POST /api/v1/copy-tasks/{taskId}/sell-all`.
+5. Only after the position cleanup step finishes, call `DELETE /api/v1/copy-tasks/{taskId}`.
+
+Before calling: validate `taskId` and confirm the full sequence.
 
 Minimum fields to ask:
 
 - Always ask: `taskId`
 
+Pre-check active positions:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" "$BASE/api/v1/copy-tasks/$TASK_ID/positions?status=active"
+```
+
+If active positions exist, clear them first:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/copy-tasks/$TASK_ID/sell-all"
+```
+
+Then delete the task:
+
 ```bash
 curl -sS --fail-with-body "${AUTH[@]}" -X DELETE "$BASE/api/v1/copy-tasks/$TASK_ID"
 ```
+
+Guidance:
+
+- There is no dedicated API to delete positions directly; use `sell-all` as the required position cleanup step.
+- If no active positions are returned, delete the task directly after confirmation.
+- If `sell-all` partially skips positions, report the skipped reasons, but continue with task deletion unless the user explicitly wants to stop.
 
 ### Action: Get total PnL
 
@@ -619,11 +648,31 @@ Batch update guidance:
 - `POST /api/v1/copy-tasks/batch-delete`
 - Required: `taskIds` (array of task IDs)
 
-Before calling: confirm deletion.
+Required flow before batch delete:
+
+1. Validate all `taskIds`.
+2. For each task, check `GET /api/v1/copy-tasks/{taskId}/positions?status=active`.
+3. If a task has active positions, include it in the confirmation summary and state that those positions will be cleared before deletion.
+4. After explicit confirmation, run `POST /api/v1/copy-tasks/{taskId}/sell-all` for each task that still has active positions.
+5. After the position cleanup passes finish, call batch delete once with all `taskIds`.
+
+Before calling: confirm the full cleanup-then-delete operation.
 
 Minimum fields to ask:
 
 - Always ask: `taskIds`
+
+Example: pre-check one task's active positions
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" "$BASE/api/v1/copy-tasks/$TASK_ID/positions?status=active"
+```
+
+Example: clear positions for one task before batch delete
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/copy-tasks/$TASK_ID/sell-all"
+```
 
 ```bash
 TASK_IDS=("64f0c7e7b8e4f8c1a1b2c3d4" "64f0c7e7b8e4f8c1a1b2c3d5")
@@ -634,6 +683,11 @@ PAYLOAD="$(jq -n \
 curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/copy-tasks/batch-delete" \
   -d "$PAYLOAD"
 ```
+
+Guidance:
+
+- There is no batch position-delete endpoint; clean positions task by task with `sell-all`, then call `batch-delete`.
+- If some `sell-all` calls skip positions, report that in the confirmation/result summary and continue unless the user explicitly asks to stop.
 
 ---
 

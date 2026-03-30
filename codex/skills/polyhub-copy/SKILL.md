@@ -5,7 +5,7 @@ description: Manage Polyhub copy-trading tasks, positions, trades, signals, sell
 
 # Polyhub Copy
 
-Version: v0.3.8
+Version: v0.3.9
 
 Use this skill when the user wants to manage copy-trading tasks on Polyhub.
 
@@ -61,6 +61,8 @@ AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/
 - Get one task: `GET /api/v1/copy-tasks/{taskId}`
 - Create task: `POST /api/v1/copy-tasks`
 - Update task: `PATCH /api/v1/copy-tasks/{taskId}`
+- Delete one task: check `GET /api/v1/copy-tasks/{taskId}/positions?status=active`; if active positions exist, run `POST /api/v1/copy-tasks/{taskId}/sell-all` first, then `DELETE /api/v1/copy-tasks/{taskId}`
+- Batch delete tasks: for each task, check active positions and run `sell-all` where needed before `POST /api/v1/copy-tasks/batch-delete`
 - View signals: `GET /api/v1/copy-signals`
 - View signal stats: `GET /api/v1/copy-signals/stats`
 - View positions or trades: use the task-specific positions or trades endpoints requested by the user
@@ -139,6 +141,56 @@ Copy mode guidance:
 PAYLOAD="$(jq -n \
   --argjson fixedAmount 5 \
   '{taskConfig: {copyMode: "FIXED_SIZE", fixedAmount: $fixedAmount}}')"
+```
+
+### Delete copy task
+
+Required flow:
+
+1. Validate `taskId`.
+2. Check active positions:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" \
+  "$BASE/api/v1/copy-tasks/$TASK_ID/positions?status=active"
+```
+
+3. If active positions exist, confirm the cleanup step, then clear them first:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" \
+  -X POST "$BASE/api/v1/copy-tasks/$TASK_ID/sell-all"
+```
+
+4. Delete the task:
+
+```bash
+curl -sS --fail-with-body "${AUTH[@]}" \
+  -X DELETE "$BASE/api/v1/copy-tasks/$TASK_ID"
+```
+
+Guidance:
+
+- There is no direct position-delete endpoint in the current API. Position cleanup before delete should use `sell-all`.
+- If the active positions list is empty, delete the task directly after confirmation.
+
+### Batch delete tasks
+
+Required flow:
+
+1. Validate all `taskIds`.
+2. For each task, check active positions and run `sell-all` first when needed.
+3. After the cleanup step finishes, batch delete:
+
+```bash
+TASK_IDS=("64f0c7e7b8e4f8c1a1b2c3d4" "64f0c7e7b8e4f8c1a1b2c3d5")
+PAYLOAD="$(jq -n \
+  --argjson taskIds "$(printf '%s\n' "${TASK_IDS[@]}" | jq -R . | jq -s .)" \
+  '{taskIds: $taskIds}')"
+
+curl -sS --fail-with-body "${AUTH[@]}" \
+  -X POST "$BASE/api/v1/copy-tasks/batch-delete" \
+  -d "$PAYLOAD"
 ```
 
 ## Error Handling
