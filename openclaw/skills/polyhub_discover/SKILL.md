@@ -5,7 +5,7 @@ description: Explore public discover data on Polyhub without API key auth, inclu
 
 # Polyhub Discover Skill
 
-Version: v0.4.1
+Version: v0.3.8
 
 ## When to use
 
@@ -30,8 +30,6 @@ This skill does not require `POLYHUB_API_KEY`.
 
 - These are public read-only endpoints. No confirmation step is required.
 - Do not invent filter values. Only pass filters the user requested.
-- If the user provides explicit filters or a full query shape, preserve them exactly.
-- Do not silently change `tag`, `sort_by`, `sort_direction`, numeric thresholds, or add extra filters.
 - Prefer building query strings from explicit user intent.
 - When querying by address, trim whitespace and keep the original checksum/casing if provided.
 
@@ -79,12 +77,6 @@ Use this when the user wants the discover page tag list or wants to browse avail
 - `GET /api/v1/traders-v2/`
 - Auth: public
 
-Priority:
-
-1. If the user gives explicit filters, map them 1:1 into query params.
-2. If the user references a visible Discover page request, mirror that request instead of using skill defaults.
-3. Only use the defaults below when the user did not provide enough detail.
-
 Core query params:
 
 - `tag` — required
@@ -117,7 +109,7 @@ Example: standard discover query
 
 ```bash
 curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag={USER_TAG_OR_Politics}&limit=20&offset=0&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc"
+  "$BASE/api/v1/traders-v2/?tag=Politics&time_range=all&limit=10&offset=0"
 ```
 
 Example: cross-tag query
@@ -140,15 +132,6 @@ Guidance:
 - Use `time_range=30d` when the user asks for recent performance.
 - Use `filterBots=1` when the user explicitly wants bot filtering.
 - Prefer `sort_direction=desc` unless the user explicitly wants ascending order.
-- Preserve backend row order unless the user explicitly asks for re-ranking.
-- Keep `tag` user-controlled. If the user specifies a tag, use it directly; otherwise default to `Politics` to match the webpage.
-
-Default Discover query shape when the user asks for the standard webpage-style leaderboard without extra detail:
-
-```bash
-curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag={USER_TAG_OR_Politics}&limit=20&offset=0&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc"
-```
 
 ---
 
@@ -214,34 +197,26 @@ Choose the scope based on user intent:
 
 Default filters (user can override any):
 - `filterBots=1` (exclude bots)
-- `tag={USER_TAG_OR_Politics}` (use user tag directly; otherwise default to webpage tag)
-- `pnl_min=1000` (keep useful candidates without over-pruning)
+- `pnl_min=5000` (minimum $5K profit in 30 days)
+- `timing_score_min=52` (at least slightly positive alpha)
 - `trade_count_30_min=30` (enough trades for statistical significance)
-- `trade_count_30_max=3000` (match webpage request shape)
-- `sort_by=timing_score`, `sort_direction=desc` (match webpage ordering)
-- `limit=20`
-- `offset=0`
+- `sort_by=ev_per_bought`, `sort_direction=desc` (rank by expected return per dollar)
+- `limit=15`
 
 ```bash
 curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag={USER_TAG_OR_Politics}&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc&limit=20&offset=0"
+  "$BASE/api/v1/traders-v2/?tag=Sports&time_range=30d&filterBots=1&pnl_min=5000&timing_score_min=52&trade_count_30_min=30&sort_by=ev_per_bought&sort_direction=desc&limit=15"
 ```
-
-Parameter handling rules:
-
-- If the user gives a full query shape, do not "improve" it with extra thresholds such as `timing_score_min`.
-- If the user asks for a specific tag page, do not broaden to `CROSS-TAG` unless they ask for it or the original query returns empty results.
-- Only use fallback loosening after stating that the original query returned no useful rows.
 
 ### Step 2: Identify hot sub-tags
 
 From Step 1 results, note which tags appear frequently in top results. Common valuable sub-tags under Sports: Soccer, Premier League, UCL, NBA, NHL, Liga MX, Argentina Primera División.
 
-Then query those specific sub-tags with the same filters to find specialists. Reuse the Step 1 query shape unless the user asks for a different sort or threshold:
+Then query those specific sub-tags with the same filters to find specialists:
 
 ```bash
 curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag=Soccer&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc&limit=10&offset=0"
+  "$BASE/api/v1/traders-v2/?tag=Soccer&time_range=30d&filterBots=1&pnl_min=5000&timing_score_min=52&trade_count_30_min=10&sort_by=ev_per_bought&sort_direction=desc&limit=10"
 ```
 
 ### Step 3: Cross-validate with by-address

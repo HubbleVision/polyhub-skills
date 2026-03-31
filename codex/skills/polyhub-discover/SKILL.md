@@ -5,7 +5,7 @@ description: Query Polyhub public discover APIs for tags, trader rankings, trade
 
 # Polyhub Discover
 
-Version: v0.4.1
+Version: v0.3.8
 
 Use this skill when the user wants public discover data from Polyhub.
 
@@ -19,9 +19,8 @@ Use this skill when the user wants public discover data from Polyhub.
 ## Workflow
 
 1. Use the terminal to call Polyhub public APIs with `curl`.
-2. If the user provides explicit filters or a full query shape, preserve them exactly.
-3. Do not silently change `tag`, `sort_by`, `sort_direction`, numeric thresholds, or add extra filters.
-4. Summarize results clearly instead of dumping raw JSON when the response is large.
+2. Only pass filters the user explicitly requested.
+3. Summarize results clearly instead of dumping raw JSON when the response is large.
 
 ## Base Setup
 
@@ -46,12 +45,6 @@ curl -sS --fail-with-body "$BASE/api/v1/markets/tags"
 
 ### List traders for a tag
 
-Priority:
-
-1. If the user gives explicit filters, map them 1:1 into query params.
-2. If the user references a visible Discover page request, mirror that request instead of using skill defaults.
-3. Only use the defaults below when the user did not provide enough detail.
-
 Required params:
 
 - `tag`
@@ -68,7 +61,7 @@ Optional params:
 
 ```bash
 curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag={USER_TAG_OR_Politics}&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc&limit=20&offset=0"
+  "$BASE/api/v1/traders-v2/?tag=Politics&time_range=all&limit=10&offset=0"
 ```
 
 Guidance:
@@ -76,15 +69,6 @@ Guidance:
 - Use `tag=CROSS-TAG` when the user wants cross-tag discover results.
 - Use `time_range=30d` for recent performance.
 - Prefer descending sort unless the user asked otherwise.
-- Preserve backend row order unless the user explicitly asks for re-ranking.
-- Keep `tag` user-controlled. If the user specifies a tag, use it directly; otherwise default to `Politics` to match the webpage.
-
-Default Discover query shape when the user asks for the standard webpage-style leaderboard without extra detail:
-
-```bash
-curl -sS --fail-with-body \
-  "$BASE/api/v1/traders-v2/?tag={USER_TAG_OR_Politics}&limit=20&offset=0&time_range=30d&filterBots=1&pnl_min=1000&trade_count_30_min=30&trade_count_30_max=3000&sort_by=timing_score&sort_direction=desc"
-```
 
 ### Trader detail by address
 
