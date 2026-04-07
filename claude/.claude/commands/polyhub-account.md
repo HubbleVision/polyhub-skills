@@ -31,6 +31,7 @@ AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/
 
 - Portfolio stats: `GET /api/v1/portfolio/stats`
 - Fee history: `GET /api/v1/user/fees`
+- Sell position by token ID: `POST /api/v1/positions/sell`
 - Manual order: `POST /api/v1/place-order`
 
 ## Examples
@@ -94,3 +95,21 @@ curl -sS --fail-with-body "${AUTH[@]}" \
   -X POST "$BASE/api/v1/place-order" \
   -d "$PAYLOAD"
 ```
+
+### Sell position by token ID
+
+Sells the entire position for a token. Confirm with user before calling.
+
+```bash
+PAYLOAD="$(jq -n \
+  --arg TokenId "..." \
+  '{TokenId: $TokenId}')"
+
+curl -sS --fail-with-body "${AUTH[@]}" \
+  -X POST "$BASE/api/v1/positions/sell" \
+  -d "$PAYLOAD"
+```
+
+Response: `success`, `totalAmount`, `soldPositions[]` (marketTitle, outcome, amount, price, totalPnl), `skippedPositions[]` (reason).
+
+Use `/positions/sell` for direct token-level sell. Use `/copy-tasks/{taskId}/sell` for task-scoped sell.
