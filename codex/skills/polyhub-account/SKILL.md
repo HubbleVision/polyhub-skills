@@ -58,6 +58,7 @@ AUTH=(-H "Authorization: Bearer $POLYHUB_API_KEY" -H "Content-Type: application/
 
 - Portfolio overview: `GET /api/v1/portfolio/stats`
 - Fee history: `GET /api/v1/user/fees`
+- Sell position by token ID: `POST /api/v1/positions/sell`
 - Manual order placement: `POST /api/v1/place-order`
 
 ## Common Calls
@@ -147,6 +148,28 @@ curl -sS --fail-with-body "${AUTH[@]}" \
   -X POST "$BASE/api/v1/place-order" \
   -d "$PAYLOAD"
 ```
+
+## Sell Position
+
+Sell the entire position for a given token ID. Partial sell is not supported.
+
+Required field: `TokenId`
+
+Before calling: confirm with the user. This action is irreversible.
+
+```bash
+PAYLOAD="$(jq -n \
+  --arg TokenId "..." \
+  '{TokenId: $TokenId}')"
+
+curl -sS --fail-with-body "${AUTH[@]}" \
+  -X POST "$BASE/api/v1/positions/sell" \
+  -d "$PAYLOAD"
+```
+
+Response: `success`, `totalAmount`, `soldPositions[]` (with `marketTitle`, `outcome`, `amount`, `price`, `totalPnl`, `marketUrl`), `skippedPositions[]` (with `reason`).
+
+Use `/positions/sell` when the user wants to sell a specific position directly by token ID. Use `/copy-tasks/{taskId}/sell` when managing positions within a copy task.
 
 ## Error Handling
 

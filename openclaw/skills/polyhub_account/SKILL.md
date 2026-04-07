@@ -12,6 +12,7 @@ Version: v0.3.8
 Use this skill when the user asks about:
 
 - Portfolio overview or stats
+- Selling a position by token ID
 
 ## Requirements
 
@@ -46,6 +47,7 @@ Send me the generated key and I'll continue right away.
 
 - Never print `POLYHUB_API_KEY` in the output.
 - Prefer building JSON with `jq -n` instead of interpolating raw shell strings.
+- For sell actions (`POST /api/v1/positions/sell`), repeat the token ID and confirm with the user before calling the API.
 
 ## Tools
 
@@ -56,6 +58,7 @@ Use the `bash` tool to call the API with `curl`.
 For common intents, map user requests like this:
 
 - “看资产统计” -> `GET /api/v1/portfolio/stats`
+- “卖出这个仓位” / “sell this position” -> `POST /api/v1/positions/sell`
 
 ### Curl base setup
 
@@ -91,6 +94,77 @@ Current UI alignment in `poly_copy`:
 ```bash
 curl -sS --fail-with-body "${AUTH[@]}" "$BASE/api/v1/portfolio/stats"
 ```
+
+---
+
+## Sell Position
+
+### Action: Sell position by token ID
+
+- `POST /api/v1/positions/sell`
+- Sells the **entire** position for the specified token. Partial sell is not supported.
+
+Required field: `TokenId` (the Polymarket token ID of the position to sell)
+
+Before calling: repeat the token ID to the user and confirm. This action is irreversible.
+
+Minimum fields to ask:
+
+- Always ask: `TokenId`
+
+```bash
+PAYLOAD="$(jq -n \
+  --arg TokenId "..." \
+  '{TokenId: $TokenId}')"
+
+curl -sS --fail-with-body "${AUTH[@]}" -X POST "$BASE/api/v1/positions/sell" \
+  -d "$PAYLOAD"
+```
+
+Response contains:
+
+- `success`: whether the sell completed
+- `totalAmount`: total USDC amount received
+- `soldPositions`: array of sold positions, each with:
+  - `marketTitle`, `outcome`: which market and side was sold
+  - `amount`: shares sold
+  - `price`: execution price
+  - `currentPrice`: market price at time of sale
+  - `pnl`, `realizedPnl`, `unrealizedPnl`, `totalPnl`: PnL breakdown
+  - `value`: USDC value of the sold position
+  - `marketUrl`: link to the market on Polymarket
+- `skippedPositions`: array of positions that could not be sold, each with:
+  - `marketTitle`, `outcome`, `amount`: what was skipped
+  - `reason`: why it was skipped
+
+Present results clearly:
+
+```
+✅ 卖出成功
+总金额: ${totalAmount} USDC
+
+已卖出:
+  - {marketTitle} ({outcome}): {amount} shares @ {price}, PnL ${totalPnl}
+
+跳过:
+  - {marketTitle} ({outcome}): {reason}
+```
+
+### Difference from copy-task sell
+
+| | `POST /api/v1/positions/sell` | `POST /api/v1/copy-tasks/{taskId}/sell` |
+|---|---|---|
+| Scope | Account-level, by token ID | Task-level, by task + market |
+| Partial sell | No (sells all) | Yes (`amount` field) |
+| Required params | `TokenId` | `taskId` + `marketId` or `conditionId` |
+| PnL in response | Yes (detailed breakdown) | No |
+| When to use | User wants to sell a specific position directly | User wants to manage positions within a copy task |
+
+Guidance:
+
+- If the user says "卖掉这个仓位" or provides a token ID, use `/positions/sell`.
+- If the user says "卖掉这个任务的某个持仓" or references a copy task, use `/copy-tasks/{taskId}/sell`.
+- If the user wants to sell ALL positions in a task, use `/copy-tasks/{taskId}/sell-all`.
 
 ---
 
