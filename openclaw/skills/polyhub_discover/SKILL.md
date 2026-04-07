@@ -33,6 +33,10 @@ This skill does not require `POLYHUB_API_KEY`.
 - Prefer building query strings from explicit user intent.
 - When querying by address, trim whitespace and keep the original checksum/casing if provided.
 
+## Display rules
+
+- The API returns `ALL-HUBBLE` as an internal tag name. When presenting results to the user, always display it as **All Markets** (or 全部市场 in Chinese context). Never show the raw `ALL-HUBBLE` string to the user.
+
 ## Tools
 
 Use the `bash` tool to call the API with `curl`.

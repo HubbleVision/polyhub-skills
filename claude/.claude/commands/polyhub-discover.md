@@ -31,6 +31,7 @@ BASE="${POLYHUB_API_BASE_URL%/}"
 - Do not invent filters or sort values.
 - Keep wallet address casing if the user provided it.
 - Summarize large responses instead of dumping raw JSON.
+- The API returns `ALL-HUBBLE` as an internal tag name. Always display it as **All Markets** (or 全部市场) to the user.
 
 ## Examples
 
