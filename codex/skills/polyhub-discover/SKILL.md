@@ -21,6 +21,7 @@ Use this skill when the user wants public discover data from Polyhub.
 1. Use the terminal to call Polyhub public APIs with `curl`.
 2. Only pass filters the user explicitly requested.
 3. Summarize results clearly instead of dumping raw JSON when the response is large.
+4. The API returns `ALL-HUBBLE` as an internal tag name. Always display it as **All Markets** (or 全部市场) to the user.
 
 ## Base Setup
 
